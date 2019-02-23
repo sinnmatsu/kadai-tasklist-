@@ -2,6 +2,7 @@ class TasksController < ApplicationController
   
   def index
     @tasks = Task.all
+    #モデルのインスタンスを作成して全ての一覧を取得する
   end
 
   def show
@@ -47,11 +48,13 @@ class TasksController < ApplicationController
     @task.destroy
     redirect_to tasks_url
   end
-end
+  
+  private
 
-private
-
-def task_params
-    params.require(:task).permit(:content)
+  def task_params
+    params.require(:task).permit(:content,:title,:status)
     #POSTメソッドが発動するとparamsにそのまま代入される
+    #parmasに代入する値をここで制限しておく
+  end
 end
+
