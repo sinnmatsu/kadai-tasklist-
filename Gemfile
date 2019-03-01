@@ -55,4 +55,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :production do
   gem 'pg', '0.21.0'
 end
-#productionでしかしか使用できないgemはproductionのグループ内で作成する必要がある
+#production環境でしか使用できないgemはproductionのグループ内で作成する必要がある
+gem 'bcrypt', '~> 3.1.7'
