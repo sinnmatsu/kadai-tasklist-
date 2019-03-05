@@ -1,24 +1,29 @@
 class TasksController < ApplicationController
-  
+  before_action :require_user_logged_in
   def index
-    @tasks = Task.all
-    #モデルのインスタンスを作成して全ての一覧を取得する
+    if logged_in?
+    
+      @tasks=current_user.tasks.all
+      #ログインしているユーザーの全ての投稿データ
+    end
   end
 
   def show
     @task = Task.find(params[:id])
-    #showを発動したモデルのインスタンスが代入される
   end
+  
 
   def new
-    @task = Task.new
+    @task = current_user.tasks.build
   end
+  
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
 
     if @task.save
       flash[:success] = 'Message が正常に投稿されました'
+      #keyとvalueの対のデータでsessionに保存することができる
       redirect_to @task
     else
       flash.now[:danger] = 'Message が投稿されませんでした'
