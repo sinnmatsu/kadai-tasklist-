@@ -1,20 +1,28 @@
 class TasksController < ApplicationController
+  #before_actionはApplicationControllerでもいいし、このコントローラー内のメソッドを設定しても良い
+  #before_actionは「事前にメソッドを発動することができるとオプションが付いているだけ」のこと
   before_action :require_user_logged_in
   def index
     if logged_in?
-    
       @tasks=current_user.tasks.all
       #ログインしているユーザーの全ての投稿データ
+      
     end
   end
 
   def show
     @task = Task.find(params[:id])
+    unless current_user.id==@task.user.id
+      redirect_to login_url
+    end
   end
   
 
   def new
     @task = current_user.tasks.build
+    unless current_user.id==@task.user.id
+      redirect_to login_url
+    end
   end
   
 
@@ -33,6 +41,9 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find(params[:id])
+    unless current_user.id==@task.user.id
+      redirect_to login_url
+    end
   end
 
   def update
@@ -61,5 +72,7 @@ class TasksController < ApplicationController
     #POSTメソッドが発動するとparamsにそのまま代入される
     #parmasに代入する値をここで制限しておく
   end
+  
+  
 end
 
