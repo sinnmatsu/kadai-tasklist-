@@ -2,27 +2,24 @@ class TasksController < ApplicationController
   #before_actionはApplicationControllerでもいいし、このコントローラー内のメソッドを設定しても良い
   #before_actionは「事前にメソッドを発動することができるとオプションが付いているだけ」のこと
   before_action :require_user_logged_in
+  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  
   def index
     if logged_in?
       @tasks=current_user.tasks.all
-      #ログインしているユーザーの全ての投稿データ
-      
+      #自分のブラウザにログインしているユーザーのタスクを全て取得することができる。
     end
   end
 
   def show
-    @task = Task.find(params[:id])
     unless current_user.id==@task.user.id
-      redirect_to login_url
+      redirect_to root_url
     end
   end
   
 
   def new
     @task = current_user.tasks.build
-    unless current_user.id==@task.user.id
-      redirect_to login_url
-    end
   end
   
 
@@ -40,14 +37,12 @@ class TasksController < ApplicationController
   end
 
   def edit
-    @task = Task.find(params[:id])
     unless current_user.id==@task.user.id
-      redirect_to login_url
+      redirect_to root_url
     end
   end
 
   def update
-    @task = Task.find(params[:id])
     
     if @task.update(task_params)
       flash[:success] = 'task は正常に更新されました'
@@ -60,9 +55,8 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task=Task.find(params[:id])
     @task.destroy
-    redirect_to tasks_url
+    redirect_to root_url
   end
   
   private
@@ -71,6 +65,10 @@ class TasksController < ApplicationController
     params.require(:task).permit(:content,:title,:status)
     #POSTメソッドが発動するとparamsにそのまま代入される
     #parmasに代入する値をここで制限しておく
+  end
+  
+  def set_task
+   @task = Task.find(params[:id])
   end
   
   
