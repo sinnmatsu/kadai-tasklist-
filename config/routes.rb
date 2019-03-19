@@ -8,8 +8,10 @@ Rails.application.routes.draw do
  resources :users, only: [:index, :new, :create]
  
  root to: 'tasks#index'
+ #まずはrootでtasksにアクセスする
  
  get 'login', to: 'sessions#new'
+ #login_pathというURLを作成し、session#newと紐ずける
  post 'login', to: 'sessions#create'
  delete 'logout', to: 'sessions#destroy'
  

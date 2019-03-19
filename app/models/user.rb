@@ -7,4 +7,5 @@ class User < ApplicationRecord
   has_secure_password
   
   has_many :tasks
+  #これで複数のtaskを取得することができる
 end
